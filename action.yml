@@ -10,22 +10,37 @@ inputs:
     type: choice
     options:
       - build
+      - build-migrate
       - create
       - deploy
       - destroy
+      - env-set
+      - find-release
+      - get-scale
+      - get-rack-param
       - login
+      - login-user
       - promote
+      - rack-param
+      - rollback
       - run
+      - scale
   password:
     description: Convox deploy key value
   host:
     description: Convox Console host address
     required: false
     default: console.convox.com
+  token:
+    description: Convox Console token value
   rack:
     description: Convox Rack name
   app:
     description: Convox app name
+  destinationApp:
+    description: Convox destination app name for build migration
+  destinationRack:
+    description: Convox destination rack name for build migration
   description:
     description: Convox build description
   cached:
@@ -35,6 +50,10 @@ inputs:
   manifest:
     description: Use a custom path for your convox.yml
     required: false
+  paramName:
+    description: Name of the parameter to get or set
+  paramValue:
+    description: Value of the parameter to set
   release:
     description: ID of the release to promote. Only needed if you have not run a build step first or you wish to override the release id from the build
     required: false
@@ -42,9 +61,25 @@ inputs:
     description: The service to run the command against
   command:
     description: The command to be run
+  count:
+    description: The number of instances to scale to
+  env:
+    description: Environment variables in the form 'key1=value1 key2=value2'
 outputs:
   release:
     description: Release ID of the created build
+  desired:
+    description: Count of desired instances
+  running:
+    description: Count of running instances
+  cpu:
+    description: CPU scale value
+  memory:
+    description: Memory scale value
+  param_value:
+    description: Rack parameter value
+  scaling_event:
+    description: Boolean value to indicate if a scaling event is in progress
 runs:
   using: 'docker'
-  image: 'docker://beastawakens/action-convox-multi-slim:1.0.0'
+  image: 'docker://beastawakens/action-convox-multi-slim:v1.0.38'
